@@ -1,0 +1,7 @@
+.truck {
+  cursor: pointer;
+}
+
+input[type=text] {
+  text-transform: capitalize;
+}
