@@ -3,7 +3,7 @@
 <div class="container-fluid p-0">
 <h1 class="h3 mb-3">Transporter</h1>
 <div class="row">
-  <div class="col-md-4 col-xl-3">
+  <div class="col-md-4">
     <div class="card mb-3">
       <div class="card-header">
         <div class="card-actions float-right">
@@ -33,8 +33,7 @@
             </div>
         </div>
         <h5 id="viewbusinessname" class="card-title mb-0"></h5>
-        <div id="viewownername" class="text-muted mb-2"></div>
-        <div id="viewtype" class="text-muted mb-2"></div>
+        <b><div id="viewownername" class="text-muted mb-2"></div></b>
         <div>
           <a class="btn btn-primary btn-sm" href="#"><span data-feather="message-square"></span> Message</a>
         </div>
@@ -43,52 +42,108 @@
       <div class="card-body">
         <h5 class="h6 card-title">Contact</h5>
         <ul class="list-unstyled mb-0">
-          <li class="mb-1">What's App Number <a href="#" id="viewwhatsappnumber"></a></li>
-          <li class="mb-1">Email Address <a href="#" id="viewemailaddress"></a></li>
-        </ul>
-      </div>
-      <hr class="my-0" />
-      <div class="card-body">
-        <h5 class="h6 card-title">Address</h5>
-        <ul class="list-unstyled mb-0">
-          <li class="mb-1"><a href="#" id="viewaddress"></a></li>
-        </ul>
-      </div>
-      <hr class="my-0" />
-      <div class="card-body">
-        <h5 class="h6 card-title">Commodity</h5>
-        <ul class="list-unstyled mb-0">
-          <li class="mb-1"><a href="#" id="viewcommodity"></a></li>
-        </ul>
-      </div>
-      <hr class="my-0" />
-      <div class="card-body">
-        <h5 class="h6 card-title">Referrer</h5>
-        <ul class="list-unstyled mb-0">
-          <li class="mb-1">Referrer Name <a href="#" id="viewreferrername"></a></li>
-          <li class="mb-1">Referrer Mobile <a href="#" id="viewreferrermobile"></a></li>
+          <li class="mb-1">What's App Number <a href="#" id="viewwhatsappnumber" onclick="copyURI(event)"></a></li>
+          <li class="mb-1">Email Address <a href="#" id="viewemailaddress" onclick="copyURI(event)"></a></li>
+          <li class="mb-1">Address <a href="#" id="viewaddress" onclick="copyURI(event)"></a></li>
+          <li class="mb-1">Referred By<a href="#" id="viewreferrername" onclick="copyURI(event)"></a></li>
+          <li class="mb-1">Aadhar <a href="#" id="viewaadhar" onclick="copyURI(event)"></a> PAN <a href="#" id="viewpan" onclick="copyURI(event)"></a> GST <a href="#" id="viewgst" onclick="copyURI(event)"></a></li>
         </ul>
       </div>
       <hr class="my-0" />
       <div class="card-body">
         <h5 class="h6 card-title">References</h5>
         <ul class="list-unstyled mb-0">
-          <li class="mb-1"><span class="fas fa-globe fa-fw mr-1"></span> <a href="#">staciehall.co</a></li>
         </ul>
       </div>
     </div>
   </div>
-  <div class="col-md-8 col-xl-9">
-    <div class="accordion" id="transporteraccordion">
+  <div class="col-md-8">
+    <div class="accordion" id="extraview">
       <div class="card">
-        <div class="card-header" id="headingThree">
-          <h5 class="card-title my-2">
-            <a href="#" data-toggle="collapse" data-target="#viewmorecontacts" aria-expanded="true" aria-controls="viewmorecontacts">More Contacts</a>
+        <div class="card-header">
+          <h5 class="card-title my-2" id="contactsheading">
+            <a href="#" data-toggle="collapse" data-target="#contacts" aria-expanded="true" aria-controls="contacts">Contacts</a>
           </h5>
         </div>
-        <div id="viewmorecontacts" class="collapse" aria-labelledby="viewmorecontacts" data-parent="#transporteraccordion">
-
+        <div id="contacts" class="collapse show" aria-labelledby="contactsheading" data-parent="#extraview">
           <div class="card-body">
+          <table id="contacttable" class="table table-striped" style="width:100%">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>WhatsApp Number</th>
+                <th>Mobile Number</th>
+                <th>Aternate Mobile</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title my-2" id="serviceheading">
+            <a href="#" data-toggle="collapse" data-target="#services" aria-expanded="true" aria-controls="services">Services</a>
+          </h5>
+        </div>
+        <div id="services" class="collapse" aria-labelledby="serviceheading" data-parent="#extraview">
+          <div class="card-body">
+            <table class="table table-striped" style="width:100%">
+              <thead>
+                <tr>
+                  <th style="width: 10%">From State</th>
+                  <th style="width: 20%">From Cities</th>
+                  <th style="width: 10%">To State</th>
+                  <th style="width: 20%">To Cities</th>
+                  <th style="width: 30%">Trucks</th>
+                  <th style="width: 10%">Commodities</th>
+                </tr>
+              </thead>
+              @for ($i = 1; $i <= 5; $i++)
+              <tr><td id="fromstate{{$i}}"></td><td id="fromcities{{$i}}"></td><td id="tostate{{$i}}"></td><td id="tocities{{$i}}"></td><td id="trucks{{$i}}"></td><td id="commodities{{$i}}"></td></tr>
+              @endfor
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title my-2" id="banksheading">
+            <a href="#" data-toggle="collapse" data-target="#banks" aria-expanded="true" aria-controls="banks">Banks</a>
+          </h5>
+        </div>
+        <div id="banks" class="collapse" aria-labelledby="banksheading" data-parent="#extraview">
+          <div class="card-body">
+          <table id="banktable" class="table table-striped" style="width:100%">
+            <thead>
+              <tr>
+                <th>Holder Name</th>
+                <th>Account Number</th>
+                <th>Name</th>
+                <th>Branch</th>
+                <th>IFSC Code</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title my-2" id="documentsheading">
+            <a href="#" data-toggle="collapse" data-target="#documents" aria-expanded="true" aria-controls="documents">Documents</a>
+          </h5>
+        </div>
+        <div id="documents" class="collapse" aria-labelledby="documentsheading" data-parent="#extraview">
+          <div class="card-body">
+            <div id="viewdocumentfill" class="row">
+            </div>
           </div>
         </div>
       </div>

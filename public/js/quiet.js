@@ -102,18 +102,31 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   if(window.location.pathname === "/admin/transporter/view") {
+    function ratings (ratings) {
+      if (ratings == 5)
+        return "Very Good";
+      if (ratings == 4)
+        return "Good";
+      if (ratings == 3)
+        return "Normal";
+      if (ratings == 2)
+        return "Okay";
+      if (ratings == 1)
+        return "Bad";
+    }
     id=(window.location.href).split('?')[1];
     $.ajax({
       type: "get",
       url: '/api/transporters/'+id,
       success: function(data) {
         $("#viewbusinessname").append(data.businessname);
-        $("#viewownername").append(data.ownername);
-        $("#viewtype").append(data.type);
+        $("#viewownername").append(data.ownername + ", " + data.type + ", " + ratings(data.ratings));
+        $("#viewaadhar").append(data.aadhar);
+        $("#viewpan").append(data.pan);
+        $("#viewgst").append(data.gst);
         $("#viewwhatsappnumber").append(data.whatsappnumber);
         $("#viewemailaddress").append(data.email);
-        $("#viewreferrername").append(data.referrername);
-        $("#viewreferrermobile").append(data.referrermobile);
+        $("#viewreferrername").append(data.referrername + " ("+data.referrermobile+")");
 
         $('#edittransporteranchor').attr("href", "/admin/transporter/edit?"+id);
       }
@@ -122,17 +135,9 @@ document.addEventListener("DOMContentLoaded", function() {
         type: "get",
         url: '/api/contacts/'+response.id,
         success: function(data) {
-          $.each(data, function() {
-            appendText = "";
-            appendText += "<div class='card-body col-md-4'><ul class='list-unstyled mb-0'>"
-            if(data.name) {
-              appendText += "<li class='mb-1'>Name <a href='#'>"+data.name+"</a></li>";
-              appendText += data.whatsappnumber ? "<li class='mb-1'>What's App Number <a href='#'>"+data.whatsappnumber+"</a></li>" : "";
-              appendText += data.mobile ? "<li class='mb-1'>Contact Number <a href='#'>"+data.mobile+"</a></li>" : "";
-              appendText += data.mobile2 ? "<li class='mb-1'>Alternate Contact <a href='#'>"+data.mobile2+"</a></li>" : "";
-            }
-            appendText += "</ul></div>"
-            $('#viewmorecontacts').append(appendText);
+          $("#contacttable").empty();
+          $.each(data, function(index, element) {
+            $("#contacttable").append("<tr><td>"+element.name+"</td><td>"+element.mobile+"</td><td>"+element.mobile2+"</td><td>"+element.whatsappnumber+"</td></tr>");
           });
         }
       })
@@ -140,31 +145,53 @@ document.addEventListener("DOMContentLoaded", function() {
         type: "get",
         url: '/api/regions/view/'+response.region,
         success: function(data) {
-          $("#viewaddress").append(response.address+" ,"+data.state+", "+data.city+" ,"+response.area+".");
+          $("#viewaddress").append(response.address+" ,"+data.state+", "+data.city+" ,"+response.area);
+          $("#viewbusinessname").append(" ,"+data.state+", "+data.city+" ,"+response.area);
         }
       })
       $.ajax({
         type: "post",
-        url: '/api/documents/'+visitingcard,
-        data: formData,
-        datatype: 'json',
-        cache: false,
-        contentType: false,
-        processData: false,
+        url: '/api/documents/multiple',
+        data: {documents: response.visitingcard.split(';')},
         success: function(data) {
-        $("#"+id+"carouselinner").empty();
-        $("#"+id+"id").val("");
+        $("#viewvisitingcardcarouselinner").empty();
         $.each(data, function(index,element) {
-          if ( $('#'+id+"carouselinner").children().length > 0 ) {
-            $('#'+id+"carouselinner").append("<div class='carousel-item'><img class='img-responsive' width='600' height='300' src='/storage/"+element.path+"'>");
+          if ( $("#viewvisitingcardcarouselinner").children().length > 0 ) {
+            $("#viewvisitingcardcarouselinner").append("<div class='carousel-item'><img class='img-responsive' width='500' height='250' src='/storage/"+element.path+"'>");
           } else {
-            $('#'+id+"carouselinner").append("<div class='carousel-item active'><img class='img-responsive' width='600' height='300' src='/storage/"+element.path+"'>");
+            $("#viewvisitingcardcarouselinner").append("<div class='carousel-item active'><img class='img-responsive' width='500' height='250' src='/storage/"+element.path+"'>");
           }
-          $('#'+id+"id").val($('#'+id+"id").val() !== "" ? $('#'+id+"id").val() + ";" + element.id : $('#'+id+"id").val() + element.id);
         });
-
         }
       })
+      $.ajax({
+        type: "get",
+        url: '/api/services/'+response.id,
+        success: function(data) {
+          getViewServices(data);
+        }
+      });
+      $.ajax({
+        type: "get",
+        url: '/api/banks/'+response.id,
+        success: function(data) {
+          $("#banktable tbody").empty();
+          $.each(data, function(index, element){
+            $("#banktable tbody").append("<tr><td>"+element.holdername+"</td><td>"+element.accountnumber+"</td><td>"+element.name+"</td><td>"+element.branch+"</td><td>"+element.ifsccode+"</td></tr>");
+          });
+        }
+      });
+      $.ajax({
+        type: "post",
+        url: '/api/documents/multiple/',
+        data: {documents: response.documents.split(';')},
+        success: function(data) {
+          $("#viewdocumentfill").empty();
+          $.each(data, function(index, element) {
+            $("#viewdocumentfill").append("<div class='card-body'><img src='/storage/"+element.path+"' height=275 width=550 /></div>");
+          });
+        }
+      });
     });
   }
 
@@ -265,6 +292,7 @@ document.addEventListener("DOMContentLoaded", function() {
         $("#emailaddress").val(data.email);
         $("#referrername").val(data.referrername);
         $("#referrermobile").val(data.referrermobile);
+        $("#documentsid").val(data.documents);
       }
     }).then(function(response){
       $.ajax({
@@ -392,7 +420,7 @@ document.addEventListener("DOMContentLoaded", function() {
       contentType: false,
       processData: false,
       success: function(data) {
-        window.location.replace("/admin/transporter/view?"+data.id);
+        setTimeout(function(){window.location.replace("/admin/transporter/view?"+data.id);}, 1000);
         notyf.success('Your changes have been successfully saved!');
       },
       error: function() {
@@ -998,4 +1026,109 @@ function getState(cityId) {
   if (cityId >= 537 && cityId < 656) {return 537;}    if (cityId >= 1016 && cityId < 1093) {return 1016;}    if (cityId >= 1972 && cityId < 1982) {return 1972;}       if (cityId >= 2769 && cityId < 2803) {return 2769;}
   if (cityId >= 656 && cityId < 684) {return 656;}    if (cityId >= 1093 && cityId < 1284) {return 1093;}    if (cityId >= 1982 && cityId < 2114) {return 1982;}       if (cityId >= 2803) {return 2803;}
   if (cityId >= 684 && cityId < 692) {return 684;}    if (cityId >= 1284 && cityId < 1357) {return 1284;}    if (cityId >= 2114 && cityId < 2122) {return 2114;}
+}
+
+function copyURI(evt) {
+    evt.preventDefault();
+    navigator.clipboard.writeText(evt.target.innerHTML).then(() => {
+      var notyf = new Notyf();
+      notyf.success('Copied Successfully!');
+    }, () => {
+      notyf.error('Not copied, Please try again!');
+    });
+}
+
+function getObjects(obj, key, val) {
+  var objects = [];
+  for (var i in obj) {
+      if (!obj.hasOwnProperty(i)) continue;
+      if (typeof obj[i] == 'object') {
+          objects = objects.concat(getObjects(obj[i], key, val));
+      } else if (i == key && obj[key] == val) {
+          objects.push(obj);
+      }
+  }
+  return objects;
+}
+
+function __getViewServices(i, stateresponse) {
+  fromArray = stateresponse.fromregion.split(';');
+  toArray = stateresponse.toregion.split(';');
+  truck = stateresponse.truck.split(';');
+
+  $.ajax({
+    type: "get",
+    url: '/api/regions/view/'+fromArray[0],
+    success: function(data) {
+      $("#fromstate"+i).append(data.state);
+    }
+  });
+  $.ajax({
+    type: "get",
+    url: '/api/regions/view/'+toArray[0],
+    success: function(data) {
+      $("#tostate"+i).append(data.state);
+    }
+  });
+
+  $.ajax({
+    type: "get",
+    url: '/api/regions/'+fromArray[0],
+    success: function(data) {
+      $.each(fromArray, function(index, fromelement){
+        $.each(data, function (index, element) {
+          if(element.id == fromelement) {
+            $("#fromcities"+i).append(element.city + ", ");
+          }
+        })
+      });
+    }
+  });
+  $.ajax({
+    type: "get",
+    url: '/api/regions/'+toArray[0],
+    success: function(data) {
+      $.each(toArray, function(index, toelement){
+        $.each(data, function (index, element) {
+          if(element.id == toelement) {
+            $("#tocities"+i).append(element.city + ", ");
+          }
+        })
+      });
+    }
+  });
+  $.ajax({
+    type: "get",
+    url: '/api/trucks',
+    success: function(data) {
+      $.each(truck, function(index, gettruck){
+        $.each(data, function (index, object) {
+          if(object.id == gettruck) {
+            $("#trucks"+i).append(object.type+"("+object.style+"), "+object.category+", "+object.size+" Feet, "+object.capacity+" Ton.</br>");
+          }
+        })
+      });
+    }
+  });
+
+  $("#commodities"+i).append(stateresponse.commodity);
+
+}
+
+function getViewServices(stateresponse) {
+  if(stateresponse[0].fromregion !== null && stateresponse[0].toregion !== null) {
+    setTimeout(function () {__getViewServices(1, stateresponse[0]);}, 500);
+  }
+  if(stateresponse[1].fromregion !== null && stateresponse[1].toregion !== null) {
+    setTimeout(function () {__getViewServices(2, stateresponse[1]);}, 1000);
+  }
+  if(stateresponse[2].fromregion !== null && stateresponse[2].toregion !== null) {
+    setTimeout(function () {__getViewServices(3, stateresponse[2]);}, 1500);
+  }
+  if(stateresponse[3].fromregion !== null && stateresponse[3].toregion !== null) {
+    setTimeout(function () {__getViewServices(4, stateresponse[3]);}, 2000);
+  }
+  if(stateresponse[4].fromregion !== null && stateresponse[4].toregion !== null) {
+    setTimeout(function () {__getViewServices(5, stateresponse[4]);}, 2500);
+  }
 }
