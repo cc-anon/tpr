@@ -27,5 +27,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::delete('documents/{document}', 'App\Http\Controllers\DocumentController@delete');
 
   Route::get('states', 'App\Http\Controllers\StateController@index');
-  Route::get('cities/{city}', 'App\Http\Controllers\CityController@show');
+  Route::get('cities', 'App\Http\Controllers\CityController@index');
 });

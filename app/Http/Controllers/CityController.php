@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class CityController extends Controller{
-  public function show($city) {
-    return City::where('state', $city)->get();
+  public function index() {
+    return City::all();
   }
 }

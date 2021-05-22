@@ -74,8 +74,9 @@
                   </div>
                   <div class="form-group col-md-4">
                     <label for="inputDocument">Documents</label>
-                    <input id="documents" class="form-control btn btn-primary instantsave" type="file" multiple />
+                    <input id="document" class="form-control btn btn-primary instantsave" type="file" multiple />
                     <input type="hidden" id="documentsid" value="" />
+                    <input type="hidden" id="documentsstring" value="" />
                   </div>
                 </div>
                 <div class="form-row">
@@ -140,6 +141,7 @@
                     </div>
                   <input id="visitingcard" class="btn btn-primary instantview" type="file" multiple />
                   <input type="hidden" id="visitingcardid" value="" />
+                  <input type="hidden" id="visitingcardstring" value="" />
                 </div>
               </div>
             </div>
