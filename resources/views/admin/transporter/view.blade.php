@@ -8,10 +8,11 @@
       <div class="card-header">
         <div class="card-actions float-right">
           <div class="dropdown show">
+            <input type="hidden" id="transporterid" value="" />
             <a href="#" data-toggle="dropdown" data-display="static"><i class="align-middle" data-feather="more-horizontal"></i></a>
             <div class="dropdown-menu dropdown-menu-right">
               <a class="dropdown-item" id="edittransporteranchor">Edit</a>
-              <a class="dropdown-item" href="#">Delete</a>
+                <a href="#deletetransportermodal" class="dropdown-item" data-toggle="modal" data-traget="#deletetransportermodal">Delete</a>
             </div>
           </div>
         </div>
@@ -51,8 +52,9 @@
       </div>
       <hr class="my-0" />
       <div class="card-body">
-        <h5 class="h6 card-title">References</h5>
+        <h5 class="h6 card-title">Head Branch</h5>
         <ul class="list-unstyled mb-0">
+          <li class="mb-1"><a href="#" id="headbranch"></a></li>
         </ul>
       </div>
     </div>
@@ -61,34 +63,11 @@
     <div class="accordion" id="extraview">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title my-2" id="contactsheading">
-            <a href="#" data-toggle="collapse" data-target="#contacts" aria-expanded="true" aria-controls="contacts">Contacts</a>
-          </h5>
-        </div>
-        <div id="contacts" class="collapse show" aria-labelledby="contactsheading" data-parent="#extraview">
-          <div class="card-body">
-          <table id="contacttable" class="table table-striped" style="width:100%">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>WhatsApp Number</th>
-                <th>Mobile Number</th>
-                <th>Aternate Mobile</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
           <h5 class="card-title my-2" id="serviceheading">
             <a href="#" data-toggle="collapse" data-target="#services" aria-expanded="true" aria-controls="services">Services</a>
           </h5>
         </div>
-        <div id="services" class="collapse" aria-labelledby="serviceheading" data-parent="#extraview">
+        <div id="services" class="collapse show" aria-labelledby="serviceheading" data-parent="#extraview">
           <div class="card-body">
             <table class="table table-striped" style="width:100%">
               <thead>
@@ -112,6 +91,32 @@
       </div>
       <div class="card">
         <div class="card-header">
+          <h5 class="card-title my-2" id="contactsheading">
+            <a href="#" data-toggle="collapse" data-target="#contacts" aria-expanded="true" aria-controls="contacts">Contacts</a>
+          </h5>
+        </div>
+        <div id="contacts" class="collapse" aria-labelledby="contactsheading" data-parent="#extraview">
+          <div class="card-body">
+          <table id="contacttable" class="table table-striped" style="width:100%">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>WhatsApp Number</th>
+                <th>Mobile Number</th>
+                <th>Aternate Mobile</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for ($i = 1; $i <= 5; $i++)
+              <tr><td id="viewname{{$i}}"></td><td id="viewmobile1{{$i}}"></td><td id="viewmobile2{{$i}}"></td><td id="viewwhatsapp{{$i}}"></td></tr>
+              @endfor
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
           <h5 class="card-title my-2" id="banksheading">
             <a href="#" data-toggle="collapse" data-target="#banks" aria-expanded="true" aria-controls="banks">Banks</a>
           </h5>
@@ -129,6 +134,9 @@
               </tr>
             </thead>
             <tbody>
+              @for ($i = 1; $i <= 5; $i++)
+              <tr><td id="holdername{{$i}}"></td><td id="accountnumber{{$i}}"></td><td id="bankname{{$i}}"></td><td id="bankbranch{{$i}}"></td><td id="ifsccode{{$i}}"></td></tr>
+              @endfor
             </tbody>
           </table>
           </div>
@@ -150,5 +158,26 @@
     </div>
   </div>
 </div>
+</div>
+<div class="modal fade" id="deletetransportermodal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body m-3">
+        <div class="mb-0">
+          <p><strong>Are you sure you want to delete this Transporter?</strong></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="deletetransporterconfirm" type="button" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
 </div>
 @stop

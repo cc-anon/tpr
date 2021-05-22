@@ -21,26 +21,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::put('transporters/{transporter}', 'App\Http\Controllers\TransporterController@update');
   Route::delete('transporters/{transporter}', 'App\Http\Controllers\TransporterController@delete');
 
-  Route::get('regions', 'App\Http\Controllers\RegionController@index');
-  Route::get('regions/{region}', 'App\Http\Controllers\RegionController@show');
-  Route::get('regions/view/{region}', 'App\Http\Controllers\RegionController@view');
-
   Route::get('documents/{document}', 'App\Http\Controllers\DocumentController@show');
   Route::post('documents/multiple', 'App\Http\Controllers\DocumentController@multiple');
   Route::post('documents', 'App\Http\Controllers\DocumentController@store');
   Route::delete('documents/{document}', 'App\Http\Controllers\DocumentController@delete');
 
-  Route::get('contacts/{contact}', 'App\Http\Controllers\ContactController@show');
-  Route::post('contacts', 'App\Http\Controllers\ContactController@store');
-  Route::put('contacts/{contact}', 'App\Http\Controllers\ContactController@update');
-  Route::delete('contacts/{contact}', 'App\Http\Controllers\ContactController@delete');
-
-  Route::get('services/{service}', 'App\Http\Controllers\ServiceController@show');
-  Route::post('services', 'App\Http\Controllers\ServiceController@store');
-  Route::delete('services/{service}', 'App\Http\Controllers\ServiceController@delete');
-
-  Route::get('banks/{bank}', 'App\Http\Controllers\BankController@show');
-  Route::post('banks', 'App\Http\Controllers\BankController@store');
-  Route::put('banks/{bank}', 'App\Http\Controllers\BankController@update');
-  Route::delete('banks/{bank}', 'App\Http\Controllers\BankController@delete');
+  Route::get('states', 'App\Http\Controllers\StateController@index');
+  Route::get('cities/{city}', 'App\Http\Controllers\CityController@show');
 });

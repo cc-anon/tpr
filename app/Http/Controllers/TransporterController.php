@@ -2,20 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Region;
 use App\Models\Transporter;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class TransporterController extends Controller{
   public function index() {
-    return Transporter::addSelect(['state' => Region::select('state')
-      ->whereColumn('id', 'transporters.region')
-      ->limit(1),
-    'city' => Region::select('city')
-      ->whereColumn('id', 'transporters.region')
-      ->limit(1)
-    ])->get();
+    return Transporter::all();
   }
 
   public function show(Transporter $transporter) {

@@ -47,14 +47,12 @@ document.addEventListener("DOMContentLoaded", function() {
         buttonWidth: '100%',
       });
     });
-
     $('#isbranch').multiselect({
       enableCaseInsensitiveFiltering: true,
       maxHeight: 200,
       buttonWidth: '100%',
     });
     refreshbranchselect();
-
     $('.truckselect').each(function() {
       $(this).multiselect({
         enableCaseInsensitiveFiltering: true,
@@ -64,14 +62,9 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     refreshtruckselect();
 
-
     $.ajax({
       type: "get",
-      url: '/api/regions',
-      datatype: 'json',
-      cache: false,
-      contentType: false,
-      processData: false,
+      url: '/api/states',
       success: function(data) {
         $(".selectstate").empty();
         $(".selectstate").append("<option value='' disabled selected>Select State</option>");
@@ -86,11 +79,7 @@ document.addEventListener("DOMContentLoaded", function() {
     id=$(this).attr('id');
     $.ajax({
       type: "get",
-      url: '/api/regions/'+$("#"+id).val(),
-      datatype: 'json',
-      cache: false,
-      contentType: false,
-      processData: false,
+      url: '/api/cities/'+$("#"+id).val(),
       success: function(data) {
         $("#"+id.replace('state', '')).empty();
         $.each(data, function(index, element){
@@ -102,96 +91,120 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   if(window.location.pathname === "/admin/transporter/view") {
-    function ratings (ratings) {
-      if (ratings == 5)
-        return "Very Good";
-      if (ratings == 4)
-        return "Good";
-      if (ratings == 3)
-        return "Normal";
-      if (ratings == 2)
-        return "Okay";
-      if (ratings == 1)
-        return "Bad";
-    }
     id=(window.location.href).split('?')[1];
     $.ajax({
       type: "get",
       url: '/api/transporters/'+id,
       success: function(data) {
+        $("#transporterid").val(data.id);
         $("#viewbusinessname").append(data.businessname);
-        $("#viewownername").append(data.ownername + ", " + data.type + ", " + ratings(data.ratings));
+        $("#viewownername").append(data.ownername + ", " + data.type + ", " + data.ratingstring);
         $("#viewaadhar").append(data.aadhar);
         $("#viewpan").append(data.pan);
         $("#viewgst").append(data.gst);
         $("#viewwhatsappnumber").append(data.whatsappnumber);
         $("#viewemailaddress").append(data.email);
         $("#viewreferrername").append(data.referrername + " ("+data.referrermobile+")");
+        $("#headbranch").append(data.headbranchname);
+        $("#headbranch").attr('href', "/admin/transporter/view?"+data.headbranch);
+
+        $("#viewname1").append(data.name1);
+        $("#viewname2").append(data.name2);
+        $("#viewname3").append(data.name3);
+        $("#viewname4").append(data.name4);
+        $("#viewname5").append(data.name5);
+        $("#viewmobile11").append(data.mobile11);
+        $("#viewmobile12").append(data.mobile12);
+        $("#viewmobile13").append(data.mobile13);
+        $("#viewmobile14").append(data.mobile14);
+        $("#viewmobile15").append(data.mobile15);
+        $("#viewmobile21").append(data.mobile21);
+        $("#viewmobile22").append(data.mobile22);
+        $("#viewmobile23").append(data.mobile23);
+        $("#viewmobile24").append(data.mobile24);
+        $("#viewmobile25").append(data.mobile25);
+        $("#viewwhatsapp1").append(data.whatsappnumber1);
+        $("#viewwhatsapp2").append(data.whatsappnumber2);
+        $("#viewwhatsapp3").append(data.whatsappnumber3);
+        $("#viewwhatsapp4").append(data.whatsappnumber4);
+        $("#viewwhatsapp5").append(data.whatsappnumber5);
+
+        $("#viewaddress").append(data.address+" ,"+data.statestring+", "+data.citystring+" ,"+data.area);
+        $("#viewbusinessname").append(" ,"+data.statestring+", "+data.citystring+" ,"+data.area);
+
+        $("#viewvisitingcardcarouselinner").empty();
+        $.each(data.visitingcardstring.split(';'), function(index,element) {
+          if ( $("#viewvisitingcardcarouselinner").children().length > 0 ) {
+            $("#viewvisitingcardcarouselinner").append("<div class='carousel-item'><img class='img-responsive' width='500' height='250' src='/storage/"+element+"'>");
+          } else {
+            $("#viewvisitingcardcarouselinner").append("<div class='carousel-item active'><img class='img-responsive' width='500' height='250' src='/storage/"+element+"'>");
+          }
+        });
+
+        $("#fromstate1").append(data.fromstatestring1);
+        $("#fromstate2").append(data.fromstatestring2);
+        $("#fromstate3").append(data.fromstatestring3);
+        $("#fromstate4").append(data.fromstatestring4);
+        $("#fromstate5").append(data.fromstatestring5);
+        $("#fromcities1").append(data.fromcitystring1);
+        $("#fromcities2").append(data.fromcitystring2);
+        $("#fromcities3").append(data.fromcitystring3);
+        $("#fromcities4").append(data.fromcitystring4);
+        $("#fromcities5").append(data.fromcitystring5);
+        $("#tostate1").append(data.tostatestring1);
+        $("#tostate2").append(data.tostatestring2);
+        $("#tostate3").append(data.tostatestring3);
+        $("#tostate4").append(data.tostatestring4);
+        $("#tostate5").append(data.tostatestring5);
+        $("#tocities1").append(data.tocitystring1);
+        $("#tocities2").append(data.tocitystring2);
+        $("#tocities3").append(data.tocitystring3);
+        $("#tocities4").append(data.tocitystring4);
+        $("#tocities5").append(data.tocitystring5);
+        $("#trucks1").append(data.truckstring1+"</br>");
+        $("#trucks2").append(data.truckstring2+"</br>");
+        $("#trucks3").append(data.truckstring3+"</br>");
+        $("#trucks4").append(data.truckstring4+"</br>");
+        $("#trucks5").append(data.truckstring5+"</br>");
+        $("#commodities1").append(data.commodity1);
+        $("#commodities2").append(data.commodity2);
+        $("#commodities3").append(data.commodity3);
+        $("#commodities4").append(data.commodity4);
+        $("#commodities5").append(data.commodity5);
+
+        $("#holdername1").append(data.holdername1);
+        $("#holdername2").append(data.holdername2);
+        $("#holdername3").append(data.holdername3);
+        $("#holdername4").append(data.holdername4);
+        $("#holdername5").append(data.holdername5);
+        $("#accountnumber1").append(data.accountnumber1);
+        $("#accountnumber2").append(data.accountnumber2);
+        $("#accountnumber3").append(data.accountnumber3);
+        $("#accountnumber4").append(data.accountnumber4);
+        $("#accountnumber5").append(data.accountnumber5);
+        $("#bankname1").append(data.bankname1);
+        $("#bankname2").append(data.bankname2);
+        $("#bankname3").append(data.bankname3);
+        $("#bankname4").append(data.bankname4);
+        $("#bankname5").append(data.bankname5);
+        $("#bankbranch1").append(data.branch1);
+        $("#bankbranch2").append(data.branch2);
+        $("#bankbranch3").append(data.branch3);
+        $("#bankbranch4").append(data.branch4);
+        $("#bankbranch5").append(data.branch5);
+        $("#ifsccode1").append(data.ifsccode1);
+        $("#ifsccode2").append(data.ifsccode2);
+        $("#ifsccode3").append(data.ifsccode3);
+        $("#ifsccode4").append(data.ifsccode4);
+        $("#ifsccode5").append(data.ifsccode5);
+
+        $("#viewdocumentfill").empty();
+        $.each(data.documentstring.split(";"), function(index, element) {
+          $("#viewdocumentfill").append("<div class='card-body'><img src='/storage/"+element+"' height=275 width=550 /></div>");
+        });
 
         $('#edittransporteranchor').attr("href", "/admin/transporter/edit?"+id);
       }
-    }).then(function(response){
-      $.ajax({
-        type: "get",
-        url: '/api/contacts/'+response.id,
-        success: function(data) {
-          $("#contacttable").empty();
-          $.each(data, function(index, element) {
-            $("#contacttable").append("<tr><td>"+element.name+"</td><td>"+element.mobile+"</td><td>"+element.mobile2+"</td><td>"+element.whatsappnumber+"</td></tr>");
-          });
-        }
-      })
-      $.ajax({
-        type: "get",
-        url: '/api/regions/view/'+response.region,
-        success: function(data) {
-          $("#viewaddress").append(response.address+" ,"+data.state+", "+data.city+" ,"+response.area);
-          $("#viewbusinessname").append(" ,"+data.state+", "+data.city+" ,"+response.area);
-        }
-      })
-      $.ajax({
-        type: "post",
-        url: '/api/documents/multiple',
-        data: {documents: response.visitingcard.split(';')},
-        success: function(data) {
-        $("#viewvisitingcardcarouselinner").empty();
-        $.each(data, function(index,element) {
-          if ( $("#viewvisitingcardcarouselinner").children().length > 0 ) {
-            $("#viewvisitingcardcarouselinner").append("<div class='carousel-item'><img class='img-responsive' width='500' height='250' src='/storage/"+element.path+"'>");
-          } else {
-            $("#viewvisitingcardcarouselinner").append("<div class='carousel-item active'><img class='img-responsive' width='500' height='250' src='/storage/"+element.path+"'>");
-          }
-        });
-        }
-      })
-      $.ajax({
-        type: "get",
-        url: '/api/services/'+response.id,
-        success: function(data) {
-          getViewServices(data);
-        }
-      });
-      $.ajax({
-        type: "get",
-        url: '/api/banks/'+response.id,
-        success: function(data) {
-          $("#banktable tbody").empty();
-          $.each(data, function(index, element){
-            $("#banktable tbody").append("<tr><td>"+element.holdername+"</td><td>"+element.accountnumber+"</td><td>"+element.name+"</td><td>"+element.branch+"</td><td>"+element.ifsccode+"</td></tr>");
-          });
-        }
-      });
-      $.ajax({
-        type: "post",
-        url: '/api/documents/multiple/',
-        data: {documents: response.documents.split(';')},
-        success: function(data) {
-          $("#viewdocumentfill").empty();
-          $.each(data, function(index, element) {
-            $("#viewdocumentfill").append("<div class='card-body'><img src='/storage/"+element.path+"' height=275 width=550 /></div>");
-          });
-        }
-      });
     });
   }
 
@@ -222,6 +235,7 @@ document.addEventListener("DOMContentLoaded", function() {
             $('#'+id+"carouselinner").append("<div class='carousel-item active'><img class='img-responsive' width='600' height='300' src='/storage/"+element.path+"'>");
           }
           $('#'+id+"id").val($('#'+id+"id").val() !== "" ? $('#'+id+"id").val() + ";" + element.id : $('#'+id+"id").val() + element.id);
+          $('#'+id+"string").val($('#'+id+"string").val() !== "" ? $('#'+id+"string").val() + ";" + element.path : $('#'+id+"string").val() + element.path);
         });
       }
     });
@@ -248,6 +262,7 @@ document.addEventListener("DOMContentLoaded", function() {
         $("#"+id+"id").val("");
         $.each(data, function(index,element) {
           $('#'+id+"id").val($('#'+id+"id").val() !== "" ? $('#'+id+"id").val() + ";" + element.id : $('#'+id+"id").val() + element.id);
+          $('#'+id+"string").val($('#'+id+"string").val() !== "" ? $('#'+id+"string").val() + ";" + element.path : $('#'+id+"string").val() + element.path);
         });
       }
     });
@@ -383,6 +398,21 @@ document.addEventListener("DOMContentLoaded", function() {
     edittransporterdatafill();
   }
 
+  $("#deletetransporterconfirm").click(function(){
+    $.ajax({
+      type: "delete",
+      url: '/api/transporters/'+$('#transporterid').val(),
+      success: function() {
+        deleteContacts($('#transporterid').val());
+        deleteBanks($('#transporterid').val());
+        deleteServices($('#transporterid').val());
+        var notyf = new Notyf();
+        notyf.success('Your transporter has been deleted successfully.');
+        window.location.replace("/admin/transporter/index");
+      }
+    });
+  });
+
   $("#edittransportertodatabase").click(function() {
     event.preventDefault();
 
@@ -512,20 +542,130 @@ document.addEventListener("DOMContentLoaded", function() {
     formData.append("businessname", $("#transportername").val());
     formData.append("ownername", $("#ownername").val());
     formData.append("type", $("#transportertype").val());
-    formData.append("ratings", $("#ratings").val());
+    formData.append("rating", $("#ratings").val());
+    formData.append("ratingstring", $("#ratings option:selected").text());
     formData.append("email", $("#emailaddress").val());
     formData.append("whatsappnumber", $("#whatsappmobile").val());
     formData.append("aadhar", $("#transporteraadhar").val());
     formData.append("pan", $("#transporterpan").val());
     formData.append("gst", $("#transportergst").val());
     formData.append("address", $("#address").val());
-    formData.append("region", $("#basiccity").val());
+    formData.append("state", $("#basiccity").val());
+    formData.append("statestring", $("#basiccity option:selected").text());
+    formData.append("city", $("#basiccity").val());
+    formData.append("citystring", $("#basiccity option:selected").text());
     formData.append("area", $("#basicarea").val());
-    formData.append("branch", $("#isbranch").val());
+    formData.append("headbranch", $("#isbranch").val());
+    formData.append("headbranchname", $("#isbranch option:selected").text());
     formData.append("referrername", $("#referrername").val());
     formData.append("referrermobile", $("#referrermobile").val());
-    formData.append("visitingcard", $("#visitingcardid").val());
-    formData.append("documents", $("#documentsid").val());
+    formData.append("visitingcardid", $("#visitingcardid").val());
+    formData.append("visitingcardstring", $("#visitingcardstring").val());
+    formData.append("documentid", $("#documentsid").val());
+    formData.append("documentstring", $("#documentsstring").val());
+
+    formData.append("name1", $('#multiplename1').val());
+    formData.append("mobile11", $('#multiplecontact11').val());
+    formData.append("mobile21", $('#multiplecontact21').val());
+    formData.append("whatsappnumber1", $('#multiplewhatsappmobile1').val());
+    formData.append("name2", $('#multiplename2').val());
+    formData.append("mobile12", $('#multiplecontact12').val());
+    formData.append("mobile22", $('#multiplecontact22').val());
+    formData.append("whatsappnumber2", $('#multiplewhatsappmobile2').val());
+    formData.append("name3", $('#multiplename3').val());
+    formData.append("mobile13", $('#multiplecontact13').val());
+    formData.append("mobile23", $('#multiplecontact23').val());
+    formData.append("whatsappnumber3", $('#multiplewhatsappmobile3').val());
+    formData.append("name4", $('#multiplename4').val());
+    formData.append("mobile14", $('#multiplecontact14').val());
+    formData.append("mobile24", $('#multiplecontact24').val());
+    formData.append("whatsappnumber4", $('#multiplewhatsappmobile4').val());
+    formData.append("name5", $('#multiplename5').val());
+    formData.append("mobile15", $('#multiplecontact15').val());
+    formData.append("mobile25", $('#multiplecontact25').val());
+    formData.append("whatsappnumber5", $('#multiplewhatsappmobile5').val());
+
+    formData.append("holdername1", $("#bankholdername1").val());
+    formData.append("accountnumber1", $("#accountnumber1").val());
+    formData.append("bankname1", $("#bankname1").val());
+    formData.append("branch1", $("#bankbranch1").val());
+    formData.append("ifsccode1", $("#ifsccode1").val());
+    formData.append("holdername2", $("#bankholdername2").val());
+    formData.append("accountnumber2", $("#accountnumber2").val());
+    formData.append("bankname2", $("#bankname2").val());
+    formData.append("branch2", $("#bankbranch2").val());
+    formData.append("ifsccode2", $("#ifsccode2").val());
+    formData.append("holdername3", $("#bankholdername3").val());
+    formData.append("accountnumber3", $("#accountnumber3").val());
+    formData.append("bankname3", $("#bankname3").val());
+    formData.append("branch3", $("#bankbranch3").val());
+    formData.append("ifsccode3", $("#ifsccode3").val());
+    formData.append("holdername4", $("#bankholdername4").val());
+    formData.append("accountnumber4", $("#accountnumber4").val());
+    formData.append("bankname4", $("#bankname4").val());
+    formData.append("branch4", $("#bankbranch4").val());
+    formData.append("ifsccode4", $("#ifsccode4").val());
+    formData.append("holdername5", $("#bankholdername5").val());
+    formData.append("accountnumber5", $("#accountnumber5").val());
+    formData.append("bankname5", $("#bankname5").val());
+    formData.append("branch5", $("#bankbranch5").val());
+    formData.append("ifsccode5", $("#ifsccode5").val());
+
+    formData.append("fromstate1", $("#fromservicecitystate1").val());
+    formData.append("fromstate2", $("#fromservicecitystate2").val());
+    formData.append("fromstate3", $("#fromservicecitystate3").val());
+    formData.append("fromstate4", $("#fromservicecitystate4").val());
+    formData.append("fromstate5", $("#fromservicecitystate5").val());
+    formData.append("fromstatestring1", $("#fromservicecitystate1 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("fromstatestring2", $("#fromservicecitystate2 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("fromstatestring3", $("#fromservicecitystate3 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("fromstatestring4", $("#fromservicecitystate4 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("fromstatestring5", $("#fromservicecitystate5 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("tostate1", $("#toservicecitystate1").val());
+    formData.append("tostate2", $("#toservicecitystate2").val());
+    formData.append("tostate3", $("#toservicecitystate3").val());
+    formData.append("tostate4", $("#toservicecitystate4").val());
+    formData.append("tostate5", $("#toservicecitystate5").val());
+    formData.append("tostatestring1", $("#toservicecitystate1 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("tostatestring2", $("#toservicecitystate2 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("tostatestring3", $("#toservicecitystate3 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("tostatestring4", $("#toservicecitystate4 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("tostatestring5", $("#toservicecitystate5 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("fromcity1", $("#fromservicecity1").val().join(";"));
+    formData.append("fromcity2", $("#fromservicecity2").val().join(";"));
+    formData.append("fromcity3", $("#fromservicecity3").val().join(";"));
+    formData.append("fromcity4", $("#fromservicecity4").val().join(";"));
+    formData.append("fromcity5", $("#fromservicecity5").val().join(";"));
+    formData.append("fromcitystring1", $("#fromservicecity1 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("fromcitystring2", $("#fromservicecity2 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("fromcitystring3", $("#fromservicecity3 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("fromcitystring4", $("#fromservicecity4 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("fromcitystring5", $("#fromservicecity5 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("tocity1", $("#toservicecity1").val().join(";"));
+    formData.append("tocity2", $("#toservicecity2").val().join(";"));
+    formData.append("tocity3", $("#toservicecity3").val().join(";"));
+    formData.append("tocity4", $("#toservicecity4").val().join(";"));
+    formData.append("tocity5", $("#toservicecity5").val().join(";"));
+    formData.append("tocitystring1", $("#toservicecity1 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("tocitystring2", $("#toservicecity2 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("tocitystring3", $("#toservicecity3 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("tocitystring4", $("#toservicecity4 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("tocitystring5", $("#toservicecity5 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("truck1", $("#truckselect1").val().join(";"));
+    formData.append("truck2", $("#truckselect2").val().join(";"));
+    formData.append("truck3", $("#truckselect3").val().join(";"));
+    formData.append("truck4", $("#truckselect4").val().join(";"));
+    formData.append("truck5", $("#truckselect5").val().join(";"));
+    formData.append("truckstring1", $("#truckselect1 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("truckstring2", $("#truckselect2 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("truckstring3", $("#truckselect3 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("truckstring4", $("#truckselect4 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("truckstring5", $("#truckselect5 option:selected").toArray().map(item => item.text).join(';'));
+    formData.append("commodity1", $("#commodities1").val());
+    formData.append("commodity2", $("#commodities2").val());
+    formData.append("commodity3", $("#commodities3").val());
+    formData.append("commodity4", $("#commodities4").val());
+    formData.append("commodity5", $("#commodities5").val());
 
     var notyf = new Notyf();
 
@@ -537,83 +677,11 @@ document.addEventListener("DOMContentLoaded", function() {
       contentType: false,
       processData: false,
       success: function(data) {
-        window.location.replace("/admin/transporter/view?"+data.id);
         notyf.success('Your changes have been successfully saved!');
+        window.location.replace("/admin/transporter/view?"+data.id);
       },
       error: function() {
         notyf.error('Error occured!! Your change is not saved.');
-      }
-    }).then(function(response){
-      deleteContacts(response.id);
-      for(i=1; i<=5;i++){
-        if($('#multiplename'+i).val() !== "") {
-          var formData = new FormData();
-          formData.append("transporter", response.id);
-          formData.append("name", $('#multiplename'+i).val());
-          formData.append("mobile", $('#multiplecontact1'+i).val());
-          formData.append("mobile2", $('#multiplecontact2'+i).val());
-          formData.append("whatsappnumber", $('#multiplewhatsappmobile'+i).val());
-          $.ajax({
-            type: "post",
-            url: '/api/contacts',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-          })
-        }
-      }
-      deleteBanks(response.id);
-      for(i=1; i<=5;i++){
-        if($('#accountnumber'+i).val() !== "") {
-          var formData = new FormData();
-          formData.append("transporter", response.id);
-          formData.append("holdername", $("#bankholdername"+i).val());
-          formData.append("accountnumber", $("#accountnumber"+i).val());
-          formData.append("name", $("#bankname"+i).val());
-          formData.append("branch", $("#bankbranch"+i).val());
-          formData.append("ifsccode", $("#ifsccode"+i).val());
-          $.ajax({
-            type: "post",
-            url: '/api/banks',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-          })
-        }
-      }
-      deleteServices(response.id);
-      for(i=1; i<=5;i++){
-        if($('#fromservicecitystate'+i).val() !== null) {
-          fromString = "";
-          for(k=0;k < $('#fromservicecity'+i).val().length; k++) {
-            fromString += fromString === "" ? $('#fromservicecity'+i).val()[k] : ";"+$('#fromservicecity'+i).val()[k];
-          }
-          toString = "";
-          for(j=0;j < $('#toservicecity'+i).val().length; j++) {
-            toString += toString === "" ? $('#toservicecity'+i).val()[j] : ";"+$('#toservicecity'+i).val()[j];
-          }
-          truckString = "";
-          for(l=0;l < $('#truckselect'+i).val().length; l++) {
-            truckString += truckString === "" ? $('#truckselect'+i).val()[l] : ";"+$('#truckselect'+i).val()[l];
-          }
-
-          var formData = new FormData();
-          formData.append("transporter", response.id);
-          formData.append("fromregion", fromString);
-          formData.append("toregion", toString);
-          formData.append("truck", truckString);
-          formData.append("commodity", $("#commodities"+i).val());
-          $.ajax({
-            type: "post",
-            url: '/api/services',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-          })
-        }
       }
     });
   });
@@ -995,39 +1063,6 @@ function transportervalidation() {
   return true;
 }
 
-function deleteServices(transporter) {
-  $.ajax({
-    type: "delete",
-    url: '/api/services/'+transporter,
-  });
-}
-
-function deleteContacts(transporter) {
-  $.ajax({
-    type: "delete",
-    url: '/api/contacts/'+transporter,
-  });
-}
-
-function deleteBanks(transporter) {
-  $.ajax({
-    type: "delete",
-    url: '/api/banks/'+transporter,
-  });
-}
-
-function getState(cityId) {
-  if (cityId >= 1 && cityId < 78) {return 1;}         if (cityId >= 692 && cityId < 701) {return 692;}       if (cityId >= 1357 && cityId < 1369) {return 1357;}       if (cityId >= 2122 && cityId < 2181) {return 2122;}
-  if (cityId >= 78 && cityId < 320) {return 78;}      if (cityId >= 701 && cityId < 715) {return 701;}       if (cityId >= 1369 && cityId < 1621) {return 1369;}       if (cityId >= 2181 && cityId < 2359) {return 2181;}
-  if (cityId >= 320 && cityId < 363) {return 320;}    if (cityId >= 715 && cityId < 885) {return 715;}       if (cityId >= 1621 && cityId < 1923) {return 1621;}       if (cityId >= 2359 && cityId < 2405) {return 2359;}
-  if (cityId >= 363 && cityId < 420) {return 363;}    if (cityId >= 885 && cityId < 943) {return 885;}       if (cityId >= 1923 && cityId < 1945) {return 1923;}       if (cityId >= 2405 && cityId < 2545) {return 2405;}
-  if (cityId >= 420 && cityId < 535) {return 420;}    if (cityId >= 943 && cityId < 979) {return 943;}       if (cityId >= 1945 && cityId < 1963) {return 1945;}       if (cityId >= 2545 && cityId < 2558) {return 2545;}
-  if (cityId >= 535 && cityId < 537) {return 535;}    if (cityId >= 979 && cityId < 1016) {return 979;}      if (cityId >= 1963 && cityId < 1972) {return 1963;}       if (cityId >= 2558 && cityId < 2769) {return 2558;}
-  if (cityId >= 537 && cityId < 656) {return 537;}    if (cityId >= 1016 && cityId < 1093) {return 1016;}    if (cityId >= 1972 && cityId < 1982) {return 1972;}       if (cityId >= 2769 && cityId < 2803) {return 2769;}
-  if (cityId >= 656 && cityId < 684) {return 656;}    if (cityId >= 1093 && cityId < 1284) {return 1093;}    if (cityId >= 1982 && cityId < 2114) {return 1982;}       if (cityId >= 2803) {return 2803;}
-  if (cityId >= 684 && cityId < 692) {return 684;}    if (cityId >= 1284 && cityId < 1357) {return 1284;}    if (cityId >= 2114 && cityId < 2122) {return 2114;}
-}
-
 function copyURI(evt) {
     evt.preventDefault();
     navigator.clipboard.writeText(evt.target.innerHTML).then(() => {
@@ -1036,99 +1071,4 @@ function copyURI(evt) {
     }, () => {
       notyf.error('Not copied, Please try again!');
     });
-}
-
-function getObjects(obj, key, val) {
-  var objects = [];
-  for (var i in obj) {
-      if (!obj.hasOwnProperty(i)) continue;
-      if (typeof obj[i] == 'object') {
-          objects = objects.concat(getObjects(obj[i], key, val));
-      } else if (i == key && obj[key] == val) {
-          objects.push(obj);
-      }
-  }
-  return objects;
-}
-
-function __getViewServices(i, stateresponse) {
-  fromArray = stateresponse.fromregion.split(';');
-  toArray = stateresponse.toregion.split(';');
-  truck = stateresponse.truck.split(';');
-
-  $.ajax({
-    type: "get",
-    url: '/api/regions/view/'+fromArray[0],
-    success: function(data) {
-      $("#fromstate"+i).append(data.state);
-    }
-  });
-  $.ajax({
-    type: "get",
-    url: '/api/regions/view/'+toArray[0],
-    success: function(data) {
-      $("#tostate"+i).append(data.state);
-    }
-  });
-
-  $.ajax({
-    type: "get",
-    url: '/api/regions/'+fromArray[0],
-    success: function(data) {
-      $.each(fromArray, function(index, fromelement){
-        $.each(data, function (index, element) {
-          if(element.id == fromelement) {
-            $("#fromcities"+i).append(element.city + ", ");
-          }
-        })
-      });
-    }
-  });
-  $.ajax({
-    type: "get",
-    url: '/api/regions/'+toArray[0],
-    success: function(data) {
-      $.each(toArray, function(index, toelement){
-        $.each(data, function (index, element) {
-          if(element.id == toelement) {
-            $("#tocities"+i).append(element.city + ", ");
-          }
-        })
-      });
-    }
-  });
-  $.ajax({
-    type: "get",
-    url: '/api/trucks',
-    success: function(data) {
-      $.each(truck, function(index, gettruck){
-        $.each(data, function (index, object) {
-          if(object.id == gettruck) {
-            $("#trucks"+i).append(object.type+"("+object.style+"), "+object.category+", "+object.size+" Feet, "+object.capacity+" Ton.</br>");
-          }
-        })
-      });
-    }
-  });
-
-  $("#commodities"+i).append(stateresponse.commodity);
-
-}
-
-function getViewServices(stateresponse) {
-  if(stateresponse[0].fromregion !== null && stateresponse[0].toregion !== null) {
-    setTimeout(function () {__getViewServices(1, stateresponse[0]);}, 500);
-  }
-  if(stateresponse[1].fromregion !== null && stateresponse[1].toregion !== null) {
-    setTimeout(function () {__getViewServices(2, stateresponse[1]);}, 1000);
-  }
-  if(stateresponse[2].fromregion !== null && stateresponse[2].toregion !== null) {
-    setTimeout(function () {__getViewServices(3, stateresponse[2]);}, 1500);
-  }
-  if(stateresponse[3].fromregion !== null && stateresponse[3].toregion !== null) {
-    setTimeout(function () {__getViewServices(4, stateresponse[3]);}, 2000);
-  }
-  if(stateresponse[4].fromregion !== null && stateresponse[4].toregion !== null) {
-    setTimeout(function () {__getViewServices(5, stateresponse[4]);}, 2500);
-  }
 }
