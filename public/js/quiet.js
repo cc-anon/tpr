@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-
   /* ----------------------------------------------------------------------------- */
   //Basic Ajax Setup and Login Logout
   /* ----------------------------------------------------------------------------- */
@@ -99,9 +98,9 @@ document.addEventListener("DOMContentLoaded", function() {
         $("#"+id+"id").val("");
         $.each(data, function(index,element) {
           if ( $('#'+id+"carouselinner").children().length > 0 ) {
-            $('#'+id+"carouselinner").append("<div class='carousel-item'><img class='img-responsive' width='500' height='250' src='/storage/"+element.path+"'>");
+            $('#'+id+"carouselinner").append("<div class='carousel-item'><img class='img-responsive' src='/storage/"+element.path+"'>");
           } else {
-            $('#'+id+"carouselinner").append("<div class='carousel-item active'><img class='img-responsive' width='500' height='250' src='/storage/"+element.path+"'>");
+            $('#'+id+"carouselinner").append("<div class='carousel-item active'><img class='img-responsive' src='/storage/"+element.path+"'>");
           }
           $('#'+id+"id").val($('#'+id+"id").val() !== "" ? $('#'+id+"id").val() + ";" + element.id : $('#'+id+"id").val() + element.id);
           $('#'+id+"string").val($('#'+id+"string").val() !== "" ? $('#'+id+"string").val() + ";" + element.path : $('#'+id+"string").val() + element.path);
@@ -344,7 +343,6 @@ document.addEventListener("DOMContentLoaded", function() {
     maxHeight: 200,
     buttonWidth: '100%',
   });
-  refreshbranchselect();
   $('.truckselect').each(function() {
     $(this).multiselect({
       enableCaseInsensitiveFiltering: true,
@@ -363,27 +361,18 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   if(window.location.pathname === "/admin/transporter/add" || window.location.pathname === "/admin/transporter/edit") {
-    allCities = [];
-    $.ajax({
-      type: "get",
-      url: '/api/cities',
-      success: function(data) {
-        allCities = data;
-      }
-    });
+
+    refreshbranchselect();
+
     function getCity(state) {
       return allCities.filter(item => item.state == state);
     }
-    $.ajax({
-      type: "get",
-      url: '/api/states',
-      success: function(data) {
-        $(".selectstate").empty();
-        $(".selectstate").append("<option value='' disabled selected>Select State</option>");
-        $.each(data, function(index, element){
-          $(".selectstate").append("<option value='"+element.id+"'>"+element.state+"</option>");
-        });
-      }
+
+    $(".selectstate").empty();
+    $(".selectstate").append("<option value='' disabled selected>Select State</option>");
+
+    $.each(allStates, function(index, element){
+      $(".selectstate").append("<option value='"+element.id+"'>"+element.state+"</option>");
     });
 
     refreshtruckselect();
@@ -629,9 +618,9 @@ document.addEventListener("DOMContentLoaded", function() {
         $("#viewvisitingcardcarouselinner").empty();
         $.each(data.visitingcardstring.split(';'), function(index,element) {
           if ( $("#viewvisitingcardcarouselinner").children().length > 0 ) {
-            $("#viewvisitingcardcarouselinner").append("<div class='carousel-item'><img class='img-responsive' width='500' height='250' src='/storage/"+element+"'>");
+            $("#viewvisitingcardcarouselinner").append("<div class='carousel-item'><img class='img-responsive' src='/storage/"+element+"'>");
           } else {
-            $("#viewvisitingcardcarouselinner").append("<div class='carousel-item active'><img class='img-responsive' width='500' height='250' src='/storage/"+element+"'>");
+            $("#viewvisitingcardcarouselinner").append("<div class='carousel-item active'><img class='img-responsive' src='/storage/"+element+"'>");
           }
         });
 
@@ -821,9 +810,9 @@ document.addEventListener("DOMContentLoaded", function() {
         $("#visitingcardcarouselinner").empty();
         $.each(data.visitingcardstring.split(';'), function(index,element) {
           if ( $("#visitingcardcarouselinner").children().length > 0 ) {
-            $("#visitingcardcarouselinner").append("<div class='carousel-item'><img class='img-responsive' width='500' height='250' src='/storage/"+element+"'>");
+            $("#visitingcardcarouselinner").append("<div class='carousel-item'><img class='img-responsive' src='/storage/"+element+"'>");
           } else {
-            $("#visitingcardcarouselinner").append("<div class='carousel-item active'><img class='img-responsive' width='500' height='250' src='/storage/"+element+"'>");
+            $("#visitingcardcarouselinner").append("<div class='carousel-item active'><img class='img-responsive' src='/storage/"+element+"'>");
           }
         });
       }

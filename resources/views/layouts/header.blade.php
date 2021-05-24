@@ -25,5 +25,6 @@
   <script type="application/javascript" src="/js/jquery.dataTables.min.js"></script>
   <script type="application/javascript" src="/js/dataTables.bootstrap4.min.js"></script>
   <script type="application/javascript" src="/js/jquery.smartWizard.min.js"></script>
+  <script type="application/javascript" src="/js/region.js"></script>
   <script type="application/javascript" src="/js/quiet.js"></script>
 </head>

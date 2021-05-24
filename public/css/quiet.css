@@ -5,3 +5,10 @@
 input[type=text] {
   text-transform: capitalize;
 }
+
+.img-responsive {
+  max-width: 500px !important;
+  max-height: 250px !important;
+  height: 100% !important;
+  width: 100% !important;
+}
