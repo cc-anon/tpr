@@ -25,7 +25,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::post('documents/multiple', 'App\Http\Controllers\DocumentController@multiple');
   Route::post('documents', 'App\Http\Controllers\DocumentController@store');
   Route::delete('documents/{document}', 'App\Http\Controllers\DocumentController@delete');
-
-  Route::get('states', 'App\Http\Controllers\StateController@index');
-  Route::get('cities', 'App\Http\Controllers\CityController@index');
 });
