@@ -12,7 +12,7 @@
         "laravel/framework": "^8.12",
         "laravel/sanctum": "^2.10",
         "laravel/tinker": "^2.5",
-        "league/flysystem-cached-adapter": "~1.0"
+        "league/flysystem-cached-adapter": "~1.0",
         "ext-pdo_sqlite": "*"
     },
     "require-dev": {
